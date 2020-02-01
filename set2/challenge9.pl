@@ -36,7 +36,7 @@ sub test
 {
     my $text     = "YELLOW SUBMARINE";
     my $padded   = pkcs7_pad($text, 20);
-    my $unpadded = pkcs7_unpad($text);
+    my $unpadded = pkcs7_unpad($padded);
     if (pkcs7_padded($padded))
     {
         print "PADDED - OK\n";
