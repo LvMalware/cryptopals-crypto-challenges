@@ -8,9 +8,9 @@ our @EXPORT_OK = qw ( pkcs7_pad pkcs7_padded pkcs7_unpad );
 
 sub pkcs7_pad {
     my ($data, $size) = @_;
-    return $data if length($data) == $size;
+    return $data unless (length($data) % $size);
     my $pad_char = $size - length($data) % $size;
-    $data . chr($pad_char)x$pad_char;
+    $data . chr($pad_char)x$pad_char
 }
 
 sub pkcs7_padded

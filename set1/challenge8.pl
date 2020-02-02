@@ -1,7 +1,11 @@
+package ECB_DETECT;
 use utf8;
 use strict;
 use warnings;
+use Exporter qw (import);
 require "./pretty.pl";
+
+our @EXPORT_OK = qw( detect_ecb is_ecb );
 
 sub split_16bytes { map { substr $_[0], $_ * 16, 16 } 0 .. length($_[0])/16 }
 

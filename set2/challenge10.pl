@@ -3,6 +3,7 @@ use utf8;
 use strict;
 use warnings;
 use MIME::Base64;
+use Crypt::Mode::ECB;
 require "./challenge9.pl";
 require "../set1/challenge7.pl";
 
@@ -17,6 +18,12 @@ sub xor_data {
     $data;
 }
 
+sub ecb_encrypt
+{
+    my $crypt = Crypt::Mode::ECB->new('AES', 0); #0 - disable padding
+    $crypt->encrypt(PKCS7::pkcs7_pad(shift, 16), shift);
+}
+
 sub encrypt_data
 {
     my ($data, $key, $iv) = @_;
@@ -28,7 +35,7 @@ sub encrypt_data
         #disable it in order to allow our pkcs7 padding to work properly
         my $block  = PKCS7::pkcs7_pad(substr($data, $i, $size), $size);
         my $cipher = xor_data($block, $iv);
-        $iv        = AES_ECB::encrypt_text($cipher, $key);
+        $iv        = ecb_encrypt($cipher, $key);
         $cipher_data .= $iv;
     }
     $cipher_data;
