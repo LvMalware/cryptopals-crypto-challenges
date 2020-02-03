@@ -50,8 +50,8 @@ sub ecb_cut_paste
     #email=lvmalware. drk@hostname.dom ain&uid=10&role= user
     my $real_email = "lvmalware.drk\@hostname.domain";
     my $mail_block = encrypt_profile profile_for($real_email), $random_key;
-    #using the first two blocks with the original email combined with the second
-    #block of the fake email, we create a fake profile with role=admin
+    #using the first three blocks with the original email combined with the
+    #second block of the fake email, we create a fake profile with role=admin
     my $cut_paste  = substr($mail_block, 0, 48) . substr($fake_block, 16, 16);
     return decrypt_profile($cut_paste, $random_key);
 }
