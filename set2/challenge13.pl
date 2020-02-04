@@ -7,7 +7,7 @@ use JSON qw( encode_json );
 require "./challenge9.pl";
 require "./challenge10.pl";
 
-our @EXPORT_OK = qw( format_data unformat_data profile_for );
+our @EXPORT_OK = qw( format_data profile_for decrypt_profile );
 
 sub format_data
 {
