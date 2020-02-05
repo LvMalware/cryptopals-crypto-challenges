@@ -5,7 +5,7 @@ use MIME::Base64;
 use Encode qw (encode);
 require "./challenge9.pl";
 require "./challenge10.pl";
-require "../set1/challenge8.pl";
+require "./challenge8.pl";
 
 sub random_key { join '', map{chr rand 256} 1 .. $_[0] }
 

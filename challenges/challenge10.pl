@@ -5,7 +5,7 @@ use warnings;
 use MIME::Base64;
 use Crypt::Mode::ECB;
 require "./challenge9.pl";
-require "../set1/challenge7.pl";
+require "./challenge7.pl";
 
 sub xor_data {
     my ($str1, $str2) = @_;

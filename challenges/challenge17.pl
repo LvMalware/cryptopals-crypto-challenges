@@ -2,7 +2,7 @@ use utf8;
 use strict;
 use warnings;
 use MIME::Base64;
-require "../set2/challenge10.pl";
+require "./challenge10.pl";
 
 my @input_strings = ( "MDAwMDAwTm93IHRoYXQgdGhlIHBhcnR5IGlzIGp1bXBpbmc=",
 "MDAwMDAxV2l0aCB0aGUgYmFzcyBraWNrZWQgaW4gYW5kIHRoZSBWZWdhJ3MgYXJlIHB1bXBpbic=",
