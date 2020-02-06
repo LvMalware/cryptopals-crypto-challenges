@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use MIME::Base64;
 require "./challenge10.pl";
+require "./challenge15.pl";
 
 my @input_strings = ( "MDAwMDAwTm93IHRoYXQgdGhlIHBhcnR5IGlzIGp1bXBpbmc=",
 "MDAwMDAxV2l0aCB0aGUgYmFzcyBraWNrZWQgaW4gYW5kIHRoZSBWZWdhJ3MgYXJlIHB1bXBpbic=",
@@ -21,14 +22,68 @@ sub encrypt_random
 {
     my $string = decode_base64 $input_strings[rand @input_strings];
     $aes_key   = join '', map {chr rand 256} 1 .. 16 unless $aes_key;
-    my $iv     = join '', map {chr rand 256} 1 .. 16;
-    (AES_CBC::encrypt_data($string, $aes_key, $iv), $iv);
+    my $aes_iv = join '', map {chr rand 256} 1 .. 16;
+    (AES_CBC::encrypt_data($string, $aes_key, $aes_iv), $aes_iv);
+}
+
+sub decrypt_check
+{
+    my ($encrypted, $iv) = @_;
+    my $decrypted = AES_CBC::decrypt_data($encrypted, $aes_key, $iv, 0);
+    PKCS7_V::padded($decrypted);
+}
+
+
+sub padding_oracle_block
+{
+    #This works sometimes and sometimes give a fucking weird result
+    #Tell me if you see what is wrong :)
+    my ($block, $iv) = @_;
+    my $decrypted    = "";
+    for (my $i = length($block) - 1; $i > -1; $i --)
+    {
+        my $tmp_iv       = substr $iv, 0, $i;
+        my $padding_size = length($decrypted) + 1;
+        my $spoof_bytes  = join '', map {
+            chr(ord($_) ^ $padding_size)
+            } split //, $decrypted;
+        
+        for my $byte (0 .. 255)
+        {
+            if (decrypt_check($block, $tmp_iv . chr($byte) . $spoof_bytes))
+            {
+                substr($decrypted, 0, 0) = chr($byte ^ $padding_size);
+                last;
+            }
+        }
+    }
+    for (my $i = 0; $i < length($iv); $i++)
+    {
+        my $dec_byte = ord substr($decrypted, $i, 1);
+        my $iv_byte  = ord substr($iv, $i, 1);
+        substr($decrypted, $i, 1) = chr ($dec_byte ^ $iv_byte);
+    }
+    $decrypted;
+}
+
+sub padding_oracle_attack
+{
+    my ($encrypted, $iv) = @_;
+    my $block_size       = 16; #we already know the block size
+    my $decrypted        = "";
+    for my $i (0 .. int(length($encrypted) / $block_size) - 1)
+    {
+        my $block = substr $encrypted, $i * $block_size, $block_size;
+        $decrypted .= padding_oracle_block($block, $iv);
+        $iv = $block;
+    }
+    $decrypted;
 }
 
 sub test
 {
-    my ($cipher, $iv) = encrypt_random;
-    print "$cipher\n";
+    #still it makes the text a little weird sometimes ... 
+    print "|" . padding_oracle_attack(encrypt_random) . "|\n";
 }
 
 test unless caller;

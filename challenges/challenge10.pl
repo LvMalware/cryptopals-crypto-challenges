@@ -43,7 +43,7 @@ sub encrypt_data
 
 sub decrypt_data
 {
-    my ($data, $key, $iv) = @_;
+    my ($data, $key, $iv, $unpad) = @_;
     my $size = length($iv);
     my $plain_data;
     for (my $i = 0; $i < length($data); $i += $size)
@@ -53,7 +53,8 @@ sub decrypt_data
         $plain_data .= xor_data($plain, $iv);
         $iv       = $block;
     }
-    PKCS7::pkcs7_unpad($plain_data);
+    return PKCS7::pkcs7_unpad($plain_data) if $unpad;
+    return $plain_data;
 }
 
 sub test
