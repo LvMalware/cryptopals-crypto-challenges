@@ -58,6 +58,7 @@ sub padding_oracle_block
             }
         }
     }
+    
     for (my $i = 0; $i < length($iv); $i++)
     {
         my $dec_byte = ord substr($decrypted, $i, 1);
