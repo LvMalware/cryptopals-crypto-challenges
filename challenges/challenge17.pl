@@ -21,7 +21,7 @@ my $aes_iv;
 
 sub encrypt_random
 {
-    my $string = "Lucas Vieira Araujo, aka LvMalware - 2020";#decode_base64 $input_strings[rand @input_strings];
+    my $string = decode_base64 $input_strings[rand @input_strings];
     $aes_key   = join '', map {chr rand 256} 1 .. 16 unless $aes_key;
     $aes_iv    = join '', map {chr rand 256} 1 .. 16 unless $aes_iv;
     (AES_CBC::encrypt_data($string, $aes_key, $aes_iv), $aes_iv);
@@ -67,7 +67,8 @@ sub padding_oracle_block
     $decrypted;
 }
 
-sub split_blocks {
+sub split_blocks
+{
     map { substr $_[0], $_ * $_[1], $_[1] } 0 .. length($_[0])/$_[1] - 1
 }
 
