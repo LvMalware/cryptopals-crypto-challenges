@@ -36,8 +36,7 @@ sub find_char
     }
     #gets the key that produces text with higher frequency of english characters
     my $c = (sort {$ansi_chars{$a} <=> $ansi_chars{$b}} keys %ansi_chars) [-1];
-    return ($c, $ansi_chars{$c}) if $c;
-    return (undef, 0);
+    return ($c, $ansi_chars{$c});
 }
 
 sub test

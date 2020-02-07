@@ -64,7 +64,7 @@ sub get_transposed_blocks
 
 sub get_keystream
 {
-    join '', map {chr(find_byte $_) || ''} @{get_transposed_blocks shift};
+    join '', map { chr(find_byte $_) } @{get_transposed_blocks shift};
 }
 
 sub attack_ciphers
