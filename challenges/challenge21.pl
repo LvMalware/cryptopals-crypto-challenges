@@ -65,6 +65,8 @@ sub extract_number
     lowest_w_bits $y
 }
 
+sub rnd { extract_number() % shift }
+
 sub test
 {
     seed_mt time;
