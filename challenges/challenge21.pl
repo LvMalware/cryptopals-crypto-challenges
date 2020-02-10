@@ -60,8 +60,8 @@ sub extract_number
     $y   ^= (($y >> U) & D);
     $y   ^= (($y << S) & B);
     $y   ^= (($y << T) & C);
-    $y   ^= ($y >> 1);
-    $index = $index + 1;
+    $y   ^= ($y >> L);
+    $index++;
     lowest_w_bits $y
 }
 
