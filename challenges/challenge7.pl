@@ -3,7 +3,7 @@ package AES_ECB;
 use utf8;
 use strict;
 use warnings;
-use Crypt::ECB;
+use Crypt::Mode::ECB;
 use MIME::Base64;
 use Exporter qw (import);
 
@@ -11,11 +11,7 @@ our @EXPORT_OK = qw( decrypt_text );
 
 sub decrypt_text
 {
-    Crypt::ECB->new(
-        -key => $_[1],
-        -cipher => "Crypt::OpenSSL::AES",
-        -padding => "none"
-        )->decrypt($_[0]);
+    Crypt::Mode::ECB->new('AES', 0)->decrypt($_[0], $_[1]);
 }
 
 sub test
