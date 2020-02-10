@@ -9,10 +9,7 @@ use Exporter qw (import);
 
 our @EXPORT_OK = qw( decrypt_text );
 
-sub decrypt_text
-{
-    Crypt::Mode::ECB->new('AES', 0)->decrypt($_[0], $_[1]);
-}
+sub decrypt_text { Crypt::Mode::ECB->new('AES', 0)->decrypt($_[0], $_[1]) }
 
 sub test
 {
