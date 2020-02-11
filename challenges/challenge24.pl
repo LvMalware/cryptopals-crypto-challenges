@@ -47,10 +47,13 @@ sub verify_token
     $period = 3600 unless $period;
     my $int_token = hex $token;
     my $timestamp = time;
-    if (($int_token >= ($timestamp - $period)) ||
-        ($int_token <= ($timestamp + $period)))
+    for (my $t = ($timestamp - $period); $t < ($timestamp + $period); $t++)
     {
-        return 1;
+        MT19937::seed_mt($t);
+        if (MT19937::extract_number() == $int_token)
+        {
+            return 1;
+        }
     }
     return 0;
 }
