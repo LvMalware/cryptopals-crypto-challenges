@@ -17,8 +17,11 @@ sub sha1_sum
     my $self    = shift;
     my $message = shift;
     my $length  = shift || length($message)*8;
-    my ($h0, $h1, $h2, $h3, $h4) = @_ ||
-       (0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0);
+    my $h0      = shift || 0x67452301;
+    my $h1      = shift || 0xEFCDAB89;
+    my $h2      = shift || 0x98BADCFE;
+    my $h3      = shift || 0x10325476;
+    my $h4      = shift || 0xC3D2E1F0;
     $message .= "\x80";
     $message .= "\x00" while (((8 * length($message)) % 512)) != 448;
     $message .= pack("Q>", $length);
