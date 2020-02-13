@@ -21,7 +21,8 @@ sub choose_key
         <$file>;
         $index --;
     }
-    $secret_key = <$file>;
+    my $secret_key = <$file>;
     chomp $secret_key;
     close $file;
+    $secret_key;
 }
