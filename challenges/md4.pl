@@ -44,7 +44,7 @@ sub get_digest
     my $C       = shift || 0x98badcfe;
     my $D       = shift || 0x10325476;
     
-    $message    = md_pad $message;
+    $message    = md_pad $message, $length;
 
     for (my $i = 0; $i < length($message); $i += 64)
     {
