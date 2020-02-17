@@ -30,9 +30,6 @@ sub insecure_equals
     return 1;
 }
 
-insecure_equals ("A0F0C0", "A0F0C0");
-exit;
-
 sub setup_webapp
 {
     get "/test" => sub {
