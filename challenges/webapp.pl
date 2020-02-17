@@ -19,15 +19,19 @@ sub sha1_hmac
 
 sub insecure_equals
 {
-    my %hash;
-    @hash{split //, shift} = split //, shift;
-    while (my ($b1, $b2) = each %hash)
+    my ($str1, $str2) = @_;
+    for (my $i = 0; $i < length($str1); $i +=2)
     {
-        return 0 if ($b1 ne $b2);
+        my $byte1 = hex substr($str1, $i, 2);
+        my $byte2 = hex substr($str2, $i, 2);
+        return 0 if ($byte1 != $byte2);
         sleep 0.005;
     }
     return 1;
 }
+
+insecure_equals ("A0F0C0", "A0F0C0");
+exit;
 
 sub setup_webapp
 {
