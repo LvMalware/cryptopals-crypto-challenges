@@ -1,36 +1,39 @@
 package DiffieHellman;
 use strict;
-use Math::BigInt;
 use warnings;
+use Math::BigInt;
+use Math::BigInt::Random qw( random_bigint );
 use base 'Exporter';
-
 our $VERSION = 0.1;
 our @EXPORT  = qw( expmod );
 
-sub expmod {
+#Modular Exponetial function from Rosetta Code
+#Avaiable at https://rosettacode.org/wiki/Modular_exponentiation#Perl
+#Accessed in 18/feb/2020
+sub expmod
+{
     my($a, $b, $n) = @_;
-    return 0 if ($n == -1);
-    my $result = 1;
-    $a %= $n;
-    while ($b > 0)
-    {
-        ($result *= $a) %= $n if ($b % 2);
-        $b >>= 1;
-        ($a *= $a * $a) %= $n;
-    }
-    $result
+    my $c = 1;
+    do {
+        ($c *= $a) %= $n if $b % 2;
+        ($a *= $a) %= $n;
+    } while ($b = int $b/2);
+    $c;
 }
 
 sub new
 {
-    srand time;
     my $self = shift;
     my %args = @_;
     unless (defined($args{p}) and defined($args{g}))
     {
         die "You must specify the numbers P and G" 
     }
-    my $data = { G => $args{g}, P => $args{p}, SEC_KEY => int rand $args{p} };
+    my $data = {
+        G       => $args{g},
+        P       => $args{p},
+        SEC_KEY => random_bigint(min=>1, max=>$args{p})
+    };
     bless $data, $self;
 }
 
