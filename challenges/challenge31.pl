@@ -1,3 +1,4 @@
+package HMAC_BREAK;
 use utf8;
 use strict;
 use warnings;
@@ -51,6 +52,7 @@ sub find_hmac
     for my $c (1 .. $hmac_len)
     {
         $signature .= find_next_byte($signature, $filename, $times, $hmac_len);
+        print "SIGNATURE: " . str_hex($signature) . "\n"
     }
     return $signature;
 }
