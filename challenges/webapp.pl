@@ -7,6 +7,9 @@ require "./sha1.pl";
 use lib ".";
 use HMAC;
 
+#sleep_time should be 50_000 for challenge 31
+use constant sleep_time => 2_000; #1 millisecond = 1000 microseconds
+
 sub sha1_hmac
 {
     my $message = shift;
@@ -26,7 +29,7 @@ sub insecure_equals
         my $byte1 = ord substr($str1, $i, 1);
         my $byte2 = ord substr($str2, $i, 1);
         return 0 if ($byte1 != $byte2);
-        usleep(50000); #1 millisecond = 1000 microseconds
+        usleep(sleep_time);
     }
     return 1;
 }
