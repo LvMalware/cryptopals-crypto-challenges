@@ -3,11 +3,14 @@ use utf8;
 use strict;
 use warnings;
 use Exporter qw (import);
+use Digest::SHA qw( sha1_hex );
 
 our @EXPORT_OK = qw ( random_bytes );
 
 #I use it a lot, so...
-sub random_bytes{ join '', map { chr rand 256 } 1 .. $_[0] }
+sub random_bytes { join '', map { chr rand 256 } 1 .. $_[0] }
+
+sub derive_key { substr sha1_hex("$_[0]"), 0, $_[1] || 16 }
 
 sub choose_key
 {
