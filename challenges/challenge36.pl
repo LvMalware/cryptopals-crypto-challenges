@@ -1,3 +1,4 @@
+package SRP;
 use utf8;
 use strict;
 use bigint;
