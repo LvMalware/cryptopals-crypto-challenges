@@ -1,6 +1,7 @@
 package Utils;
 use utf8;
 use strict;
+use bigint;
 use warnings;
 use Exporter qw (import);
 use Digest::SHA qw( sha1_hex );
@@ -28,4 +29,18 @@ sub choose_key
     chomp $secret_key;
     close $file;
     $secret_key;
+}
+
+#Modular Exponetial function from Rosetta Code
+#Avaiable at https://rosettacode.org/wiki/Modular_exponentiation#Perl
+#Accessed in 18/feb/2020
+sub expmod
+{
+    my($a, $b, $n) = @_;
+    my $c = 1;
+    do {
+        ($c *= $a) %= $n if $b % 2;
+        ($a *= $a) %= $n;
+    } while ($b = int $b/2);
+    $c;
 }
