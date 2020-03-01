@@ -23,9 +23,8 @@ sub test
     my $rsa0 = RSA->new(key_len => 1024);
     my $rsa1 = RSA->new(key_len => 1024);
     my $rsa2 = RSA->new(key_len => 1024);
-    #chinese developed a method to break RSA 2600 years before it was invented!
     my $text = "RSA is very secure... but the chinese developed a method that" .
-    " can break it 2600 years before it was even created!";
+    " can break it years before it was even created!";
     my @c_n  = (
         $rsa0->encrypt($text), $rsa1->encrypt($text), $rsa2->encrypt($text)
     );
