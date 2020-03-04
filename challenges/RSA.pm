@@ -3,6 +3,7 @@ use utf8;
 use strict;
 use bigint;
 use warnings;
+use Math::BigInt;
 use base 'Exporter';
 use Math::Prime::Util;
 use ntheory qw/invmod/;
@@ -74,9 +75,9 @@ sub _str_int { hex join '', map {sprintf "%x", ord $_} split //, $_[0] }
 #convert an integer to a string
 sub _int_str
 {
-    my $str = $_[0]->to_hex();
-    $str = length($str) % 2 ? "0$str" : $str;
-    join '', map {chr hex $_} $str =~ /.{2}/g
+    my $hex = $_[0]->to_hex();
+    $hex = length($hex) % 2 ? "0$hex" : $hex;
+    join '', map {chr hex} $hex =~ /.{2}/g;
 }
 
 sub _MDC { $_[1] ? _MDC($_[1], $_[0] % $_[1]) : $_[0] }
