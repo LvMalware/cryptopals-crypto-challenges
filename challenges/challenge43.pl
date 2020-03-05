@@ -2,9 +2,37 @@ use utf8;
 use strict;
 use bigint;
 use warnings;
+use ntheory qw (invmod);
 use Digest::SHA qw( sha1_hex );
 use lib '.';
 eval 'use DSA';
+
+sub recover_x
+{
+    my ($r, $s, $k, $h, $q) = @_;
+    ((($s * $k) - $h) * invmod($r, $q)) % $q
+}
+
+sub find_key
+{
+    my ($r, $s, $hash, $y, $p, $q, $g) = @_;
+    print "Trying to recover the private key. It may take a while...\n";
+    print "Progress: 0.00%";
+    my $end = 2 ** 16 - 1;
+    for my $k (0 .. $end)
+    {
+        printf "\b\b\b\b\b%.2f%%", 100*$k/$end;
+        $|++;
+        my $x = recover_x($r, $s, $k, $hash, $q);
+        if (DSA::expmod($g, $x, $p) == $y)
+        {
+            print "\nPrivate key found!";
+            return $x
+        }
+    }
+    print "\n";
+    die "The K param was not on the interval between 0 and 2**16"
+}
 
 sub test
 {
@@ -28,9 +56,11 @@ sub test
         '9fc95302291'
     );
     my $dsa = DSA->new(p => $p, q => $q, g => $g, h => \&sha1_hex);
+    
+    #DSA test
+
     my $msg = 'Hello, World!';
     my @sig = $dsa->sign($msg);
-    print "Signature: @sig\n";
     if ($dsa->verify(@sig, $msg))
     {
         print "DSA is working!\n"
@@ -38,6 +68,34 @@ sub test
     else
     {
         die "I'm a failure :(  "
+    }
+
+    #Challenge 43
+
+    my $message = <<MSG;
+For those that envy a MC it can be hazardous to your health
+So be friendly, a matter of life and death, just like a etch-a-sketch
+MSG
+    
+    my $y = hex(
+        '84ad4719d044495496a3201c8ff484feb45b962e7302e56a392aee4' .
+        'abab3e4bdebf2955b4736012f21a08084056b19bcd7fee56048e004' .
+        'e44984e2f411788efdc837a0d2e5abb7b555039fd243ac01f0fb2ed' .
+        '1dec568280ce678e931868d23eb095fde9d3779191b8c0299d6e07b' .
+        'bb283e6633451e535c45513b2d33c99ea17'
+    );
+
+    my $r = 548099063082341131477253921760299949438196259240;
+    my $s = 857042759984254168557880549501802188789837994940;
+    my $x = find_key($r, $s, hex sha1_hex($message), $y, $p, $q, $g);
+    print "Private key: $x\n";
+    if (sha1_hex("$x") eq '0954edd5e0afe5542a4adf012611a91912a3ec16')
+    {
+        print "Private key recovered successful\n";
+    }
+    else
+    {
+        die "I'm a failure :(   "
     }
 }
 
