@@ -71,7 +71,7 @@ sub _expmod
 }
 
 #convert a string to an integer
-sub _str_int { hex join '', map {sprintf "%x", ord $_} split //, $_[0] }
+sub _str_int { hex join '', map {sprintf "%02x", ord $_} split //, $_[0] }
 #convert an integer to a string
 sub _int_str
 {
