@@ -71,14 +71,9 @@ sub _expmod
 }
 
 #convert a string to an integer
-sub _str_int { hex join '', map {sprintf "%02x", ord $_} split //, $_[0] }
+sub _str_int { Math::BigInt->from_bytes($_[0]) }
 #convert an integer to a string
-sub _int_str
-{
-    my $hex = $_[0]->to_hex();
-    $hex = length($hex) % 2 ? "0$hex" : $hex;
-    join '', map {chr hex} $hex =~ /.{2}/g;
-}
+sub _int_str { $_[0]->to_bytes() }
 
 sub _MDC { $_[1] ? _MDC($_[1], $_[0] % $_[1]) : $_[0] }
 
