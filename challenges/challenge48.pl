@@ -19,7 +19,7 @@ sub test
     {
         die "Something is wrong with my PKCS1.5 implementation?"
     }
-    print "If any error happens, just try again...\n";
+    print "This may take a while...\n";
     my $dec = PKCS1_ATK::PKCS_conforming_attack($enc, 768 / 8);
     print "-"x80 . "\n";
     print "Decrypted: $dec\n";

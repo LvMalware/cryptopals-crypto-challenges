@@ -56,17 +56,17 @@ sub PKCS_conforming_attack
 
     until (PKCS_conforming($c0))
     {
-        print "Step 1\n";
+        #print "Step 1\n";
         $s = random_bigint(min => 1, max => $n);
         $c0 = ($c * powmod($s, $e, $n)) % $n;
     }
 
     while (1)
     {
-        print "Iteration $i\n";
+        #print "Iteration $i\n";
         if ($i == 1)
         {
-            print "Step 2.a\n";
+            #print "Step 2.a\n";
             $s = div_ceil($n, 3 * $B);
             while (1)
             {
@@ -77,7 +77,7 @@ sub PKCS_conforming_attack
         }
         elsif (@M >= 2)
         {
-            print "Step 2.b\n";
+            #print "Step 2.b\n";
             while (1)
             {
                 $s ++;
@@ -87,7 +87,7 @@ sub PKCS_conforming_attack
         }
         elsif (@M == 1)
         {
-            print "Step 2.c\n";
+            #print "Step 2.c\n";
             my ($a, $b) = @{$M[0]};
             return RSA::_int_str($a) if ($a == $b);
             my $r = div_ceil(2 * ($b * $s - 2 * $B), $n);
@@ -105,7 +105,7 @@ sub PKCS_conforming_attack
             }
         }
 
-        print "Step 3\n";
+        #print "Step 3\n";
         my @intervals;
 
         for my $ab (@M)
@@ -122,7 +122,7 @@ sub PKCS_conforming_attack
                 add_interval \@intervals, $lower, $upper;
             }
         }
-        die "No valid intervals found" unless (@intervals > 0);
+        die "No valid intervals found (try again)" unless (@intervals > 0);
         @M = @intervals;
         $i ++;
     }
@@ -143,7 +143,7 @@ sub test
     {
         die "Something is wrong with my PKCS1.5 implementation?"
     }
-    print "If any error happens, just try again...\n";
+    print "This may take a while...\n";
     my $dec = PKCS_conforming_attack $c, 32;
     print "-"x80 . "\n";
     print "DEC: $dec\n";
