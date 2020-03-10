@@ -1,3 +1,4 @@
+package PKCS1_ATK;
 use utf8;
 use bigint;
 use strict;
@@ -9,7 +10,10 @@ use lib '.';
 eval 'use RSA';
 require "./utils.pl";
 
-my $rsa = RSA->new(key_len => 256);
+my $rsa;
+#changes for challenge 48 (Yeah, I know... it's not a very elegant solution)
+sub new_rsa { $rsa = RSA->new(key_len => $_[0]) }
+sub get_rsa { $rsa }
 
 sub PKCS_encode
 {
@@ -128,6 +132,7 @@ sub div_ceil { int(($_[0] + $_[1] - 1) / $_[1]) }
 
 sub test
 {
+    new_rsa(256);
     my $m = "kick it, CC";
     my $c = $rsa->encrypt(PKCS_encode($m, $rsa->{key_len} / 8));
     if (PKCS_conforming($c))
@@ -138,6 +143,7 @@ sub test
     {
         die "Something is wrong with my PKCS1.5 implementation?"
     }
+    print "If any error happens, just try again...\n";
     my $dec = PKCS_conforming_attack $c, 32;
     print "-"x80 . "\n";
     print "DEC: $dec\n";
