@@ -73,7 +73,7 @@ sub _expmod
 #convert a string to an integer
 sub _str_int { Math::BigInt->from_bytes($_[0]) }
 #convert an integer to a string
-sub _int_str { $_[0]->to_bytes() }
+sub _int_str { Math::BigInt->new($_[0])->to_bytes() }
 
 sub _MDC { $_[1] ? _MDC($_[1], $_[0] % $_[1]) : $_[0] }
 
